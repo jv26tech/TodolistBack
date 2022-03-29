@@ -15,23 +15,35 @@ export class TarefasService {
     return this.tarefasRepository.find();
   }
 
-  async cadastrar(data: TarefasCadastrarDto): Promise<ResultadoDto>{
-    let tarefa = new Tarefas()
-    tarefa.description = data.description
-    tarefa.completed = data.completed
-    this.tarefasRepository.save(tarefa)
-    .then((result) => {
-      return <ResultadoDto>{
-        status: true,
-        mensagem: 'sucesso'
-      }
-    })
-    .catch((error) => {
-      return <ResultadoDto>{
-        status: false,
-        mensagem: 'erro ao cadastrar tarefa'
-      }
-    })
-    return{}
+  async cadastrar(data){
+    //console.log(data)
+    const newTask = await this.tarefasRepository.save(this.tarefasRepository.create(data));
+    //console.log(newTask);
+    return newTask;
+    //let tarefa = new Tarefas()
+   // tarefa.description = data.description
+   // tarefa.completed = data.completed
+   // this.tarefasRepository.save(tarefa)
+    //.then((result) => {
+   // return <ResultadoDto>{
+  //    status: true,
+   //   mensagem: 'sucesso'
+   //   }
+    //})
+    //.catch((error) => {
+    //  return <ResultadoDto>{
+    //    status: false,
+    //    mensagem: 'erro ao cadastrar tarefa'
+    //  }
+    //})
+  }
+
+  async editar(data){
+    console.log(data)
+    const update = await this.tarefasRepository.update(this.tarefasRepository.getId(data[0]), {description: data[1]})
+  }
+
+  async deletar(data){
+    const remove = await this.tarefasRepository.delete(this.tarefasRepository.getId(data));
   }
 }
